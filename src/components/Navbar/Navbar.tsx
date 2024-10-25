@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Icon from "../../images/Foody Zone.svg";
 import "./navbar.css";
 import { startTransition, useState } from "react";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 interface Food {
   name: string;
   price: number;
@@ -19,7 +20,10 @@ const Navbar = ({ handleClick, foods }: Prop) => {
   const navigate = useNavigate();
   const applyfilter = (filter: string) => {
     handleClick(filter);
-    if (filter === "all") navigate("/");
+    if (filter === "all")
+      startTransition(() => {
+        navigate("/");
+      });
     else
       startTransition(() => {
         navigate(`/?filter=${filter}`);
@@ -33,6 +37,11 @@ const Navbar = ({ handleClick, foods }: Prop) => {
     )
       navigate(`/?search=${val}`);
     else alert("Item not found");
+  };
+  const navigateToCart = () => {
+    startTransition(() => {
+      navigate("/cart");
+    });
   };
   return (
     <>
@@ -56,6 +65,11 @@ const Navbar = ({ handleClick, foods }: Prop) => {
           <button onClick={() => applyfilter("breakfast")}>Breakfast</button>
           <button onClick={() => applyfilter("lunch")}>Lunch</button>
           <button onClick={() => applyfilter("dinner")}>Dinner</button>
+          <div className="cart">
+            <button onClick={navigateToCart}>
+              <p>Cart</p> <ShoppingCartIcon></ShoppingCartIcon>
+            </button>
+          </div>
         </div>
       </div>
       <Outlet></Outlet>

@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 const Navbar = lazy(() => import("./components/Navbar/Navbar"));
 const Items = lazy(() => import("./components/Items/Items"));
+const Cart = lazy(() => import("./components/Cart/Cart"));
 interface Food {
   name: string;
   price: number;
@@ -14,9 +15,15 @@ interface Food {
   images: string;
   type: string;
 }
+interface CartItem {
+  name: string;
+  price: number;
+  quantity: number;
+}
 export default function App() {
   const [foods, setFoods] = useState<Food[]>([]);
   const [userType, setUserType] = useState("");
+  const [cart, setCart] = useState<CartItem[]>([]);
   const BASE_URL = "http://localhost:3000/foods";
   useEffect(() => {
     const fetchData = async () => {
@@ -48,8 +55,18 @@ export default function App() {
         >
           <Route
             index
-            element={<Items foods={foods} userType={userType}></Items>}
+            element={
+              <Items
+                foods={foods}
+                userType={userType}
+                setCart={setCart}
+              ></Items>
+            }
           />
+          <Route
+            path="/cart"
+            element={<Cart cart={cart} setCart={setCart}></Cart>}
+          ></Route>
         </Route>
       </>
     )

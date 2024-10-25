@@ -1,5 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import "./items.css";
+import { useState } from "react";
 
 interface Food {
   name: string;
@@ -9,33 +10,23 @@ interface Food {
   type: string;
 }
 
+interface CartItem {
+  name: string;
+  price: number;
+  quantity: number;
+}
 interface ItemsProps {
   userType: string;
   foods: Food[];
+  setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
 }
 
-const Items = ({ userType, foods }: ItemsProps) => {
-  // const [foods, setFoods] = useState<Food[]>([]);
-  // const BASE_URL = "http://localhost:3000/foods";
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch(BASE_URL);
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch data");
-  //       }
-  //       const data = await response.json();
-  //       setFoods(data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
+const Items = ({ userType, foods, setCart }: ItemsProps) => {
   const [searchParam] = useSearchParams();
   const filtertype = searchParam.get("filter");
   const search = searchParam.get("search");
+
+  const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
 
   const filteredFoods = foods.filter((food) => {
     if (filtertype && food.type !== filtertype) {
@@ -52,6 +43,39 @@ const Items = ({ userType, foods }: ItemsProps) => {
 
     return true;
   });
+  const handleQuantityChange = (foodName: string, increment: boolean) => {
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [foodName]: Math.max(
+        0,
+        (prevQuantities[foodName] || 0) + (increment ? 1 : -1)
+      ),
+    }));
+  };
+  const handleAddToCart = (food: Food) => {
+    const quantity = quantities[food.name] || 0;
+    if (quantity === 0) return;
+
+    setCart((prevCart) => {
+      const existingItemIndex = prevCart.findIndex(
+        (item) => item.name === food.name
+      );
+
+      if (existingItemIndex >= 0) {
+        const updatedCart = [...prevCart];
+        updatedCart[existingItemIndex].quantity += quantity;
+        return updatedCart;
+      } else {
+        return [...prevCart, { name: food.name, price: food.price, quantity }];
+      }
+    });
+
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [food.name]: 0,
+    }));
+  };
+
   return (
     <div className="item-container">
       {filteredFoods.length > 0 ? (
@@ -72,6 +96,21 @@ const Items = ({ userType, foods }: ItemsProps) => {
               <h3>{food.name}</h3>
               <p>Price: ${food.price}</p>
               <p>{food.text}</p>
+
+              <div className="item-num">
+                <button onClick={() => handleQuantityChange(food.name, false)}>
+                  -
+                </button>
+                <p>{quantities[food.name] || 0}</p>
+                <button onClick={() => handleQuantityChange(food.name, true)}>
+                  +
+                </button>
+                <div className="cart-btn">
+                  <button onClick={() => handleAddToCart(food)}>
+                    Add to cart
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         ))

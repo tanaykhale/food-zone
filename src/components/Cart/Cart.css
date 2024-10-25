@@ -1,0 +1,100 @@
+
+.cart-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4f4f9;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .cart-header {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  th,
+  td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #d4d4d8;
+    color: #333;
+    font-weight: 500;
+    font-size: 18px;
+  }
+  
+  td {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .cart-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .item-name {
+    text-align: left;
+    padding-left: 20px;
+  }
+  .item-quantity{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:0.5rem;
+  }
+  .empty-cart-message {
+    color: #999;
+    font-size: 16px;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .sub-total {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .sub-total strong {
+    color: #e67e22;
+  }
+  
+  .item-total-price {
+    font-weight: 600;
+    color: #2c3e50;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    th,
+    td {
+      font-size: 14px;
+      padding: 8px;
+    }
+  
+    .cart-header {
+      font-size: 20px;
+    }
+  
+    .sub-total {
+      font-size: 16px;
+    }
+  }
+  
